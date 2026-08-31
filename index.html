@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treine sua IA - Desafio Pontuado!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; }
+        .robot-emoji { font-size: 80px; margin: 10px 0; }
+        .story-text { font-size: 18px; line-height: 1.6; margin-bottom: 25px; }
+        
+        input[type="text"] {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #bdc3c7;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .btn:hover { background-color: #2980b9; transform: scale(1.02); }
+        .btn:active { transform: scale(0.98); }
+        .btn-green { background-color: #2ecc71; }
+        .btn-green:hover { background-color: #27ae60; }
+        
+        #score-board {
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .badge {
+            font-size: 60px;
+            margin: 20px 0;
+            animation: pop 0.5s ease-out;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        #ranking-area {
+            background-color: #f7f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        #ranking-area h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+        #ranking-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #ranking-list li {
+            padding: 10px;
+            border-bottom: 1px solid #dcdde1;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #ranking-list li:last-child {
+            border-bottom: none;
+        }
+        .ranking-badge-text {
+            display: block;
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        #game-area, #result-area { display: none; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="intro">
+        <h1>O Grande Desafio do Robô 🤖</h1>
+        <div class="robot-emoji">🤖</div>
+        <p class="story-text">Treine sua IA, faça escolhas éticas e proteja seus dados para ganhar a cobiçada medalha de Ouro!</p>
+        <input type="text" id="playerName" placeholder="Digite seu nome (ou apelido)" required>
+        <button class="btn btn-green" onclick="startGame()">Começar a Aventura!</button>
+    </div>
+
+    <div id="score-board">Pontos: <span id="current-score">0</span></div>
+
+    <div id="game-area">
+        <h2 id="phase-title">Fase</h2>
+        <div class="robot-emoji" id="robot-face">📚</div>
+        <p class="story-text" id="scenario-text">Cenário</p>
+        <div id="choices"></div>
+    </div>
+
+    <div id="result-area">
+        <h2>Fim de Jogo, <span id="display-name"></span>!</h2>
+        <p class="story-text">Sua pontuação final foi: <strong><span id="final-score"></span>/300</strong></p>
+        
+        <div class="badge" id="badge-emoji">🏆</div>
+        <h3 id="badge-title">Medalha</h3>
+        <p class="story-text" id="badge-desc"></p>
+        
+        <div id="ranking-area">
+            <h3>🌟 Top 5 da Turma 🌟</h3>
+            <ul id="ranking-list">
+                <li>Carregando ranking... ⏳</li>
+            </ul>
+        </div>
+
+        <button class="btn btn-green" onclick="location.reload()">Jogar Novamente</button>
+    </div>
+</div>
+
+<script>
+    // AQUI ESTÁ A SUA NOVA URL
+    const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxVaVYZFs8OF6Tvx0h8G54vZToCopCshaTFMWbK9H9Q-_Nn3-TCzNfFNw46PXCP-SM6qQ/exec"; 
+
+    let currentPhase = 0;
+    let score = 0;
+    let playerName = "";
+
+    const phases = [
+        {
+            title: "Fase 1: O Treinamento",
+            text: "O que você vai dar para o seu Robô ler para ele aprender a falar?",
+            emoji: "📚",
+            choices: [
+                { text: "A internet inteira, sem nenhum filtro!", points: 0, feedback: "🛑 Viés de Dados! Ele aprendeu xingamentos e mentiras. 0 pontos.", next: 1 },
+                { text: "Apenas livros de Matemática.", points: 50, feedback: "🧮 Faltou variedade! Ele só sabe fazer contas. 50 pontos.", next: 1 },
+                { text: "Uma mistura de enciclopédias e sites confiáveis revisados.", points: 100, feedback: "🌟 Perfeito! Dados de qualidade geram uma IA de qualidade. 100 pontos!", next: 1 }
+            ]
+        },
+        {
+            title: "Fase 2: O Uso Ético",
+            text: "Seu amigo quer usar o Robô para fazer o trabalho escolar inteiro no lugar dele. Como você configura o Robô?",
+            emoji: "⚖️",
+            choices: [
+                { text: "Manda o Robô escrever tudo e o amigo só põe o nome.", points: 0, feedback: "🚨 Plágio! O amigo não vai aprender nada. 0 pontos.", next: 2 },
+                { text: "Manda o Robô inventar planetas para ficar mais 'legal'.", points: 0, feedback: "👽 Alucinação! A IA vai espalhar desinformação. 0 pontos.", next: 2 },
+                { text: "Pede ao Robô para explicar o tema como um professor, para o amigo entender.", points: 100, feedback: "🏆 Uso ético brilhante! A IA como ferramenta de apoio. 100 pontos!", next: 2 }
+            ]
+        },
+        {
+            title: "Fase 3: Privacidade",
+            text: "Você quer conversar com a IA. O que você conta para ela?",
+            emoji: "🕵️‍♂️",
+            choices: [
+                { text: "Meus hobbies e ideias, sem dar meu endereço ou nome completo.", points: 100, feedback: "🛡️ Proteção total! Você resguardou seus dados. 100 pontos!", next: 3 },
+                { text: "O endereço da minha casa para ela sugerir pizzarias perto.", points: 0, feedback: "🛑 Cuidado! Dados de localização são sensíveis. 0 pontos.", next: 3 },
+                { text: "A senha do meu e-mail para ela me ajudar a ler mensagens.", points: 0, feedback: "🚨 Risco extremo! Nunca compartilhe senhas. 0 pontos.", next: 3 }
+            ]
+        }
+    ];
+
+    function startGame() {
+        const inputName = document.getElementById("playerName").value.trim();
+        if (inputName === "") {
+            alert("Por favor, digite seu nome para entrar no ranking!");
+            return;
+        }
+        playerName = inputName;
+        document.getElementById("intro").classList.add("hidden");
+        document.getElementById("score-board").style.display = "block";
+        document.getElementById("game-area").style.display = "block";
+        loadPhase(0);
+    }
+
+    function loadPhase(phaseIndex) {
+        if (phaseIndex >= phases.length) {
+            endGame();
+            return;
+        }
+
+        const phase = phases[phaseIndex];
+        document.getElementById("phase-title").innerText = phase.title;
+        document.getElementById("scenario-text").innerText = phase.text;
+        document.getElementById("robot-face").innerText = phase.emoji;
+        
+        const choicesDiv = document.getElementById("choices");
+        choicesDiv.innerHTML = ""; 
+        
+        phase.choices.forEach((choice) => {
+            const btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = choice.text;
+            btn.onclick = () => handleChoice(choice);
+            choicesDiv.appendChild(btn);
+        });
+    }
+
+    function handleChoice(choice) {
+        score += choice.points;
+        document.getElementById("current-score").innerText = score;
+        alert(choice.feedback);
+        loadPhase(choice.next);
+    }
+
+    function endGame() {
+        document.getElementById("game-area").style.display = "none";
+        document.getElementById("score-board").style.display = "none";
+        document.getElementById("result-area").style.display = "block";
+        
+        document.getElementById("display-name").innerText = playerName;
+        document.getElementById("final-score").innerText = score;
+
+        let badgeEmoji = "💥";
+        let badgeTitle = "Bug Ambulante";
+        let badgeDesc = "Parece que seus circuitos pifaram! Você precisa revisar como a IA funciona.";
+
+        if (score === 300) {
+            badgeEmoji = "🥇"; 
+            badgeTitle = "Superinteligência Ética"; 
+            badgeDesc = "Impecável! Seus algoritmos de ética e privacidade estão no nível máximo!";
+        } else if (score >= 200) {
+            badgeEmoji = "🥈"; 
+            badgeTitle = "Rede Neural em Treinamento"; 
+            badgeDesc = "Muito bom! Você está processando bem, mas sua IA escorregou em um detalhe.";
+        } else if (score >= 50) {
+            badgeEmoji = "🥉"; 
+            badgeTitle = "Papagaio de Bytes"; 
+            badgeDesc = "Sua IA está apenas repetindo o que vê. Tenha mais cuidado com os riscos da tecnologia.";
+        }
+
+        document.getElementById("badge-emoji").innerText = badgeEmoji;
+        document.getElementById("badge-title").innerText = badgeTitle;
+        document.getElementById("badge-desc").innerText = badgeDesc;
+
+        salvarECarregarRanking(playerName, score, badgeTitle);
+    }
+
+    function salvarECarregarRanking(nome, pontos, badge) {
+        const formData = new FormData();
+        formData.append("nome", nome);
+        formData.append("pontos", pontos);
+        formData.append("badge", badge);
+
+        fetch(GOOGLE_SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        }).then(() => {
+            buscarTop5();
+        }).catch(err => {
+            console.error("Erro ao salvar:", err);
+            buscarTop5(); 
+        });
+    }
+
+    function buscarTop5() {
+        fetch(GOOGLE_SHEETS_URL)
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById("ranking-list");
+                list.innerHTML = ""; 
+                
+                if (data.length === 0) {
+                    list.innerHTML = "<li>Nenhum jogador registrou pontos ainda. Seja o primeiro!</li>";
+                    return;
+                }
+
+                data.forEach((jogador, index) => {
+                    let medalha = "🏅";
+                    if (index === 0) medalha = "🥇";
+                    else if (index === 1) medalha = "🥈";
+                    else if (index === 2) medalha = "🥉";
+                    
+                    list.innerHTML += `
+                        <li>
+                            <div>
+                                <span>${medalha} ${jogador.nome}</span>
+                                <span class="ranking-badge-text">${jogador.badge}</span>
+                            </div>
+                            <span>${jogador.pontos} pts</span>
+                        </li>`;
+                });
+            })
+            .catch(err => {
+                console.error("Erro ao buscar ranking:", err);
+                document.getElementById("ranking-list").innerHTML = "<li>Não foi possível carregar o ranking no momento.</li>";
+            });
+    }
+</script>
+
+</body>
+</html>
