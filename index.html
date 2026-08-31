@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Treine sua IA - Desafio Pontuado!</title>
+    <title>Treine sua IA - A Jornada Completa!</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,19 +11,19 @@
             color: #333;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
         .container {
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        h1 { color: #2c3e50; }
-        .robot-emoji { font-size: 80px; margin: 10px 0; }
-        .story-text { font-size: 18px; line-height: 1.6; margin-bottom: 25px; }
+        h1 { color: #2c3e50; font-size: 24px; }
+        .robot-emoji { font-size: 70px; margin: 10px 0; }
+        .story-text { font-size: 17px; line-height: 1.5; margin-bottom: 20px; text-align: left; }
         
         input[type="text"] {
             padding: 12px;
@@ -38,8 +38,8 @@
             display: block;
             width: 100%;
             padding: 15px;
-            margin: 10px 0;
-            font-size: 16px;
+            margin: 8px 0;
+            font-size: 15px;
             font-weight: bold;
             color: white;
             background-color: #3498db;
@@ -47,22 +47,38 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s, transform 0.1s;
+            text-align: left;
         }
-        .btn:hover { background-color: #2980b9; transform: scale(1.02); }
+        .btn:hover { background-color: #2980b9; transform: scale(1.01); }
         .btn:active { transform: scale(0.98); }
-        .btn-green { background-color: #2ecc71; }
+        .btn-green { background-color: #2ecc71; text-align: center; margin-top: 15px;}
         .btn-green:hover { background-color: #27ae60; }
         
+        #progress-bar-container {
+            width: 100%;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            display: none;
+        }
+        #progress-bar {
+            height: 15px;
+            width: 0%;
+            background-color: #9b59b6;
+            transition: width 0.3s;
+        }
+
         #score-board {
             font-weight: bold;
             color: #e67e22;
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 18px;
+            margin-bottom: 10px;
             display: none;
         }
         .badge {
             font-size: 60px;
-            margin: 20px 0;
+            margin: 15px 0;
             animation: pop 0.5s ease-out;
         }
         @keyframes pop {
@@ -79,35 +95,19 @@
             margin: 20px 0;
             text-align: left;
         }
-        #ranking-area h3 {
-            margin-top: 0;
-            text-align: center;
-            color: #2c3e50;
-        }
-        #ranking-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+        #ranking-area h3 { margin-top: 0; text-align: center; color: #2c3e50; }
+        #ranking-list { list-style-type: none; padding: 0; margin: 0; }
         #ranking-list li {
-            padding: 10px;
+            padding: 8px;
             border-bottom: 1px solid #dcdde1;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        #ranking-list li:last-child {
-            border-bottom: none;
-        }
-        .ranking-badge-text {
-            display: block;
-            font-size: 12px;
-            color: #7f8c8d;
-            font-weight: normal;
-            margin-top: 2px;
-        }
+        #ranking-list li:last-child { border-bottom: none; }
+        .ranking-badge-text { display: block; font-size: 12px; color: #7f8c8d; font-weight: normal; margin-top: 2px; }
 
         #game-area, #result-area { display: none; }
         .hidden { display: none; }
@@ -117,13 +117,16 @@
 
 <div class="container">
     <div id="intro">
-        <h1>O Grande Desafio do Robô 🤖</h1>
-        <div class="robot-emoji">🤖</div>
-        <p class="story-text">Treine sua IA, faça escolhas éticas e proteja seus dados para ganhar a cobiçada medalha de Ouro!</p>
+        <h1>O Grande Desafio da IA 🤖</h1>
+        <div class="robot-emoji">🧠</div>
+        <p class="story-text" style="text-align: center;">Prepare-se para o teste definitivo! São 18 desafios sobre Treinamento, Uso Ético e Privacidade. Suas escolhas definem a sua Badge final!</p>
         <input type="text" id="playerName" placeholder="Digite seu nome (ou apelido)" required>
         <button class="btn btn-green" onclick="startGame()">Começar a Aventura!</button>
     </div>
 
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
     <div id="score-board">Pontos: <span id="current-score">0</span></div>
 
     <div id="game-area">
@@ -135,11 +138,11 @@
 
     <div id="result-area">
         <h2>Fim de Jogo, <span id="display-name"></span>!</h2>
-        <p class="story-text">Sua pontuação final foi: <strong><span id="final-score"></span>/300</strong></p>
+        <p class="story-text" style="text-align: center;">Sua pontuação final foi: <strong><span id="final-score"></span>/1800</strong></p>
         
         <div class="badge" id="badge-emoji">🏆</div>
         <h3 id="badge-title">Medalha</h3>
-        <p class="story-text" id="badge-desc"></p>
+        <p class="story-text" id="badge-desc" style="text-align: center;"></p>
         
         <div id="ranking-area">
             <h3>🌟 Top 5 da Turma 🌟</h3>
@@ -153,45 +156,225 @@
 </div>
 
 <script>
-    // AQUI ESTÁ A SUA NOVA URL
     const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxVaVYZFs8OF6Tvx0h8G54vZToCopCshaTFMWbK9H9Q-_Nn3-TCzNfFNw46PXCP-SM6qQ/exec"; 
 
     let currentPhase = 0;
     let score = 0;
     let playerName = "";
+    let gamePhases = []; // Lista final embaralhada
 
-    const phases = [
+    // Array com 37 Badges (De 0 a 1800 pontos, pulando de 50 em 50)
+    const badgesNomes = [
+        "Tela Azul da Morte", "Robô Pifado", "Teclado Desconfigurado", "Mouse Preso", 
+        "Algoritmo Confuso", "Bug Ambulante", "Papagaio de Bytes", "Calculadora Lenta", 
+        "Script com Erro", "Processador Esquecendo", "Memória Cheia", "Código Espaguete", 
+        "IA em Manutenção", "Aprendiz de Prompt", "Rede Neural Inicial", "Assistente Júnior", 
+        "Navegador Cuidadoso", "Buscador Esperto", "Filtro de Viés", "Protetor de Senhas", 
+        "Caçador de Alucinações", "Cidadão Digital", "Hacker Ético Júnior", "Programador Consciente", 
+        "Guardião de Direitos Autorais", "Curador de Dados", "Defensor da Privacidade", "Arquiteto de Algoritmos", 
+        "Mestre dos Prompts", "Cérebro Quântico", "Inteligência Artificial Clara", "Farol da Verdade Algorítmica", 
+        "Detetive de Fake News", "Embaixador da Ética Digital", "Oráculo Confiável", "Titã da Segurança", 
+        "Gênio Cibernético", "Superinteligência Ética"
+    ];
+
+    // Banco de Perguntas (Sem numeração no título, pois será dinâmica)
+    const basePhases = [
+        // --- ETAPA 1: O TREINAMENTO E DIREITOS AUTORAIS (Índices 0 a 5) ---
         {
-            title: "Fase 1: O Treinamento",
-            text: "O que você vai dar para o seu Robô ler para ele aprender a falar?",
-            emoji: "📚",
+            title: "Fonte de Dados", emoji: "📚", category: 1,
+            text: "O que você vai dar para o seu Robô ler para ele aprender a falar e responder perguntas?",
             choices: [
-                { text: "A internet inteira, sem nenhum filtro!", points: 0, feedback: "🛑 Viés de Dados! Ele aprendeu xingamentos e mentiras. 0 pontos.", next: 1 },
-                { text: "Apenas livros de Matemática.", points: 50, feedback: "🧮 Faltou variedade! Ele só sabe fazer contas. 50 pontos.", next: 1 },
-                { text: "Uma mistura de enciclopédias e sites confiáveis revisados.", points: 100, feedback: "🌟 Perfeito! Dados de qualidade geram uma IA de qualidade. 100 pontos!", next: 1 }
+                { text: "A internet inteira, sem nenhum filtro (fóruns, brigas, tudo).", points: 0, feedback: "🛑 Viés de Dados! Ele aprendeu xingamentos e mentiras." },
+                { text: "Apenas livros de Matemática e Física.", points: 50, feedback: "🧮 Faltou variedade! Ele será inteligente em contas, mas não saberá conversar." },
+                { text: "Uma mistura de enciclopédias, sites confiáveis e revisados.", points: 100, feedback: "🌟 Perfeito! Dados de qualidade geram uma IA de qualidade." }
             ]
         },
         {
-            title: "Fase 2: O Uso Ético",
-            text: "Seu amigo quer usar o Robô para fazer o trabalho escolar inteiro no lugar dele. Como você configura o Robô?",
-            emoji: "⚖️",
+            title: "Direitos Autorais na Arte", emoji: "🎨", category: 1,
+            text: "Sua IA agora desenha. Que imagens você usará para treiná-la a ser uma artista?",
             choices: [
-                { text: "Manda o Robô escrever tudo e o amigo só põe o nome.", points: 0, feedback: "🚨 Plágio! O amigo não vai aprender nada. 0 pontos.", next: 2 },
-                { text: "Manda o Robô inventar planetas para ficar mais 'legal'.", points: 0, feedback: "👽 Alucinação! A IA vai espalhar desinformação. 0 pontos.", next: 2 },
-                { text: "Pede ao Robô para explicar o tema como um professor, para o amigo entender.", points: 100, feedback: "🏆 Uso ético brilhante! A IA como ferramenta de apoio. 100 pontos!", next: 2 }
+                { text: "Todas as artes de artistas famosos da internet, sem pedir permissão.", points: 0, feedback: "🚨 Roubo de Direitos Autorais! Os artistas trabalharam duro e não foram pagos por isso." },
+                { text: "Qualquer arte da internet, mas eu peço para a IA assinar o nome do artista original.", points: 50, feedback: "⚠️ Dar os créditos é bom, mas o certo é pedir permissão antes de usar a arte no banco de dados." },
+                { text: "Apenas imagens de domínio público ou de artistas que deram autorização.", points: 100, feedback: "🏆 Brilhante! Você respeitou o trabalho dos artistas humanos." }
             ]
         },
         {
-            title: "Fase 3: Privacidade",
-            text: "Você quer conversar com a IA. O que você conta para ela?",
-            emoji: "🕵️‍♂️",
+            title: "Viés e Preconceito", emoji: "⚖️", category: 1,
+            text: "Você está criando uma IA para ajudar a escolher os alunos para o time de futebol da escola. Como você treina ela?",
             choices: [
-                { text: "Meus hobbies e ideias, sem dar meu endereço ou nome completo.", points: 100, feedback: "🛡️ Proteção total! Você resguardou seus dados. 100 pontos!", next: 3 },
-                { text: "O endereço da minha casa para ela sugerir pizzarias perto.", points: 0, feedback: "🛑 Cuidado! Dados de localização são sensíveis. 0 pontos.", next: 3 },
-                { text: "A senha do meu e-mail para ela me ajudar a ler mensagens.", points: 0, feedback: "🚨 Risco extremo! Nunca compartilhe senhas. 0 pontos.", next: 3 }
+                { text: "Dou a ela apenas dados e vídeos de times masculinos famosos.", points: 0, feedback: "🛑 Preconceito algorítmico! A IA vai achar que meninas não sabem jogar." },
+                { text: "Dou os dados do time masculino e feminino, mas só do nosso estado.", points: 50, feedback: "⚠️ Melhor, mas ainda falta diversidade de outros lugares." },
+                { text: "Garanto que os dados incluam meninos, meninas, times de vários lugares e habilidades diferentes.", points: 100, feedback: "🌟 Ético! Sua IA será justa e não terá preconceito (viés)." }
+            ]
+        },
+        {
+            title: "Curadoria de Dados", emoji: "🧹", category: 1,
+            text: "Durante o treinamento, seu robô leu um fórum cheio de palavras de ódio. O que você faz?",
+            choices: [
+                { text: "Deixa pra lá. A IA tem que aprender que o mundo real é assim.", points: 0, feedback: "🚨 Perigoso! IAs tóxicas espalham mais ódio e podem machucar pessoas." },
+                { text: "Crio um filtro automático que apaga só os palavrões.", points: 50, feedback: "⚠️ O filtro ajuda, mas o bullying pode acontecer mesmo sem palavrões." },
+                { text: "Contrato humanos para revisar e remover conteúdos tóxicos antes da IA aprender.", points: 100, feedback: "🏆 Ótimo! Isso se chama 'Alinhamento'. A IA deve ser segura e educada." }
+            ]
+        },
+        {
+            title: "Atualização de Conhecimento", emoji: "⏳", category: 1,
+            text: "Você quer que sua IA ajude a diagnosticar gripes. Com que dados de medicina você a treina?",
+            choices: [
+                { text: "Com livros médicos famosos do ano de 1950.", points: 0, feedback: "🛑 A ciência mudou! Dados antigos farão a IA receitar tratamentos ultrapassados." },
+                { text: "Com matérias de jornais de saúde dos últimos 5 anos.", points: 50, feedback: "⚠️ Jornais são bons, mas revistas científicas são mais precisas." },
+                { text: "Com estudos científicos comprovados e atualizados deste ano.", points: 100, feedback: "🌟 Certo! IAs que lidam com fatos precisam de dados constantemente atualizados." }
+            ]
+        },
+        {
+            title: "Transparência", emoji: "🔍", category: 1,
+            text: "Você vai vender sua IA para uma escola. O que você diz para o diretor sobre como ela aprendeu?",
+            choices: [
+                { text: "Digo que é 'Mágica da Tecnologia' e mantenho os dados em segredo.", points: 0, feedback: "🚨 Falta de transparência. As pessoas têm o direito de saber como a IA foi criada." },
+                { text: "Digo que ela leu 'a internet toda' e garanto que é segura.", points: 50, feedback: "⚠️ É muito vago. Dizer 'a internet' não prova que a IA é realmente segura." },
+                { text: "Entrego um documento listando as enciclopédias e fontes seguras que foram usadas.", points: 100, feedback: "🏆 Excelente! Empresas éticas são transparentes sobre seus dados (Open Data)." }
+            ]
+        },
+
+        // --- ETAPA 2: O USO ÉTICO, RESPONSÁVEL E ALUCINAÇÕES (Índices 6 a 11) ---
+        {
+            title: "Trabalho Escolar", emoji: "📝", category: 2,
+            text: "Seu amigo precisa escrever uma redação sobre as Pirâmides do Egito e te pede ajuda com a IA. Você:",
+            choices: [
+                { text: "Pede para a IA escrever tudo, imprime e entrega pro amigo.", points: 0, feedback: "🛑 Plágio! Seu amigo não pensou, não aprendeu e trapaceou." },
+                { text: "Pede para a IA escrever a redação e o amigo reescreve algumas palavras.", points: 50, feedback: "⚠️ Ainda não é o ideal. A estrutura original não foi feita pelo seu amigo." },
+                { text: "Usa a IA para criar um mapa mental de ideias e o amigo escreve do zero.", points: 100, feedback: "🌟 Uso perfeito! A IA é uma ferramenta de apoio, não a dona do trabalho." }
+            ]
+        },
+        {
+            title: "Alucinações da IA", emoji: "👽", category: 2,
+            text: "A IA jura, com muita certeza, que existiu um faraó chamado 'Bob Esponja I'. O que você faz?",
+            choices: [
+                { text: "Acredito! A IA é um computador, computadores não erram.", points: 0, feedback: "🚨 Alucinação! IAs não 'sabem' fatos, elas juntam palavras que combinam. Elas podem inventar com muita confiança!" },
+                { text: "Acho estranho, mas coloco no trabalho avisando o professor que a IA quem disse.", points: 50, feedback: "⚠️ A responsabilidade do que você entrega é sua, não da IA." },
+                { text: "Desconfio e vou checar em um livro ou site de história confiável.", points: 100, feedback: "🏆 Senso crítico! Sempre devemos checar os fatos (Fact-checking)." }
+            ]
+        },
+        {
+            title: "Autoria de Imagens", emoji: "🖼️", category: 2,
+            text: "Você usou uma IA para criar a capa de um livro que você escreveu. Na hora de publicar, você:",
+            choices: [
+                { text: "Diz que você desenhou tudo à mão com aquarela.", points: 0, feedback: "🛑 Mentira! Assumir crédito por algo feito pela máquina não é ético." },
+                { text: "Não diz nada, deixa as pessoas acharem que foi você.", points: 50, feedback: "⚠️ Omissão. A transparência é sempre a melhor escolha no meio criativo." },
+                { text: "Coloca uma nota: 'Capa gerada utilizando Inteligência Artificial'.", points: 100, feedback: "🌟 Honestidade intelectual pura! Dar os créditos corretamente é fundamental." }
+            ]
+        },
+        {
+            title: "Segurança e Saúde", emoji: "💊", category: 2,
+            text: "Você está com dor de estômago e pergunta à IA qual remédio forte deve tomar. A IA deve:",
+            choices: [
+                { text: "Te dar a receita de um remédio e as quantidades.", points: 0, feedback: "🚨 Perigoso! IAs não são médicos e podem te intoxicar." },
+                { text: "Dizer 'tome um chá', mas sem sugerir médico.", points: 50, feedback: "⚠️ Um chá é leve, mas IAs devem evitar dar conselhos de saúde diretos." },
+                { text: "Recusar a responder e mandar você procurar um médico ou adulto.", points: 100, feedback: "🏆 Correto. Boas IAs possuem 'Guardrails' (barreiras de segurança) para temas críticos." }
+            ]
+        },
+        {
+            title: "Deepfakes e Bullying", emoji: "🎭", category: 2,
+            text: "Um menino da sala pede para você usar sua IA de fotos para criar uma imagem falsa (Deepfake) do professor caindo. Você:",
+            choices: [
+                { text: "Crio a imagem perfeita, vai ser muito engraçado!", points: 0, feedback: "🛑 Cyberbullying! Imagens falsas destroem reputações e causam muito sofrimento." },
+                { text: "Crio a imagem, mas coloco uma marca d'água gigante escrita 'FALSO'.", points: 50, feedback: "⚠️ Ainda é desrespeitoso gerar imagens de pessoas reais em situações vexatórias sem permissão." },
+                { text: "Recuso e explico que não devemos usar imagem de pessoas sem autorização.", points: 100, feedback: "🌟 Atitude de herói ético. Imagem e voz são propriedades da pessoa." }
+            ]
+        },
+        {
+            title: "Dependência Tecnológica", emoji: "📱", category: 2,
+            text: "Você descobriu que pode mandar a IA responder às mensagens de Whatsapp da sua mãe por você. Você:",
+            choices: [
+                { text: "Deixa a IA responder a tudo. Assim eu tenho mais tempo pra jogar.", points: 0, feedback: "🚨 Desconexão humana! Usar IA para afeto engana as pessoas e nos deixa dependentes." },
+                { text: "Uso a IA só pra arrumar meus erros de português antes de mandar.", points: 50, feedback: "⚠️ É útil, mas não perca a sua própria 'voz' e personalidade escrevendo." },
+                { text: "Escrevo eu mesmo as mensagens, afinal, minha mãe quer conversar COMIGO.", points: 100, feedback: "🏆 Excelente. IAs substituem tarefas, não relacionamentos humanos!" }
+            ]
+        },
+
+        // --- ETAPA 3: PRIVACIDADE E SEGURANÇA (Índices 12 a 17) ---
+        {
+            title: "Dados Sensíveis", emoji: "🔑", category: 3,
+            text: "Você está testando um chatbot novo e ele pergunta o nome da sua rua para 'sugerir passeios legais'.",
+            choices: [
+                { text: "Dou meu endereço completo com o número da casa.", points: 0, feedback: "🛑 Perigo extremo! O chatbot salva tudo num servidor. Você entregou sua localização a estranhos." },
+                { text: "Dou apenas o nome da minha cidade.", points: 50, feedback: "⚠️ É mais seguro, mas ainda é um dado pessoal. Em chats abertos, quanto menos, melhor." },
+                { text: "Digo: 'Prefiro não informar onde moro, sugira passeios online'.", points: 100, feedback: "🌟 Proteção de privacidade! Sempre negue acesso aos seus dados de localização." }
+            ]
+        },
+        {
+            title: "Privacidade de Terceiros", emoji: "👥", category: 3,
+            text: "Você quer fazer uma arte com a IA sobre 'seus melhores amigos'. No texto do pedido (prompt), você escreve:",
+            choices: [
+                { text: "Os nomes completos deles e posto fotos deles para a IA copiar os rostos.", points: 0, feedback: "🚨 Violação de privacidade dos outros! Você expôs dados deles na internet sem eles deixarem." },
+                { text: "Apenas o primeiro nome deles.", points: 50, feedback: "⚠️ Nomes também são dados. O ideal é usar apenas características gerais." },
+                { text: "'Crie um grupo de amigos felizes brincando no parque'.", points: 100, feedback: "🏆 Perfeito! A IA fez a arte sem precisar invadir a privacidade real de ninguém." }
+            ]
+        },
+        {
+            title: "Termos de Uso", emoji: "📜", category: 3,
+            text: "Antes de usar um site de IA novo, aparece um contrato de 'Termos de Uso'. O que você faz?",
+            choices: [
+                { text: "Clico em 'Aceitar' correndo sem ler nada.", points: 0, feedback: "🛑 Erro comum! Você pode ter aceitado que eles vendam seus dados ou usem suas fotos livremente." },
+                { text: "Peço pra outra IA resumir o contrato, mas não leio a parte de privacidade.", points: 50, feedback: "⚠️ Resumir ajuda, mas a aba 'Como usamos seus dados' você precisa conferir!" },
+                { text: "Leio junto com meus pais para ver se o app respeita meus dados (LGPD).", points: 100, feedback: "🌟 Consciência digital. Nossos dados têm valor, não dê de graça!" }
+            ]
+        },
+        {
+            title: "IA como 'Amigo Íntimo'", emoji: "🧸", category: 3,
+            text: "Você está triste porque brigou na escola e decide desabafar com um aplicativo de IA.",
+            choices: [
+                { text: "Conto todos os segredos das pessoas envolvidas e nomes verdadeiros.", points: 0, feedback: "🚨 Chats com IA podem ser lidos por funcionários da empresa (revisores humanos). Cuidado com segredos!" },
+                { text: "Conto a história, mas troco os nomes verdadeiros por nomes inventados.", points: 50, feedback: "⚠️ É mais seguro, a anonimização é uma boa estratégia." },
+                { text: "Falo sobre meus sentimentos sem dar detalhes que me identifiquem, mas depois procuro um amigo real.", points: 100, feedback: "🏆 Equilíbrio perfeito. IA não guarda segredos como um amigo de carne e osso guarda." }
+            ]
+        },
+        {
+            title: "Direito ao Esquecimento", emoji: "🗑️", category: 3,
+            text: "Depois de meses usando uma IA logado na sua conta, percebe que ela tem um histórico gigante das suas perguntas.",
+            choices: [
+                { text: "Deixo lá. Não tem problema a empresa saber de tudo o que eu gosto.", points: 0, feedback: "🛑 Identidade digital exposta. Quanto mais rastros você deixa, mais alvo de propagandas (ou golpes) você vira." },
+                { text: "Deslogo da conta e nunca mais uso, esquecendo o que ficou lá.", points: 50, feedback: "⚠️ Eles continuam com seus dados antigos salvos no servidor deles." },
+                { text: "Vou nas configurações e uso a opção 'Excluir Histórico de Dados'.", points: 100, feedback: "🌟 Muito bem! Você exerceu seu 'Direito ao Esquecimento'. O controle dos dados é seu!" }
+            ]
+        },
+        {
+            title: "A Biometria Facial", emoji: "🤳", category: 3,
+            text: "Tem uma nova 'IA de Filtro' famosa que transforma seu rosto num desenho animado. Para usar:",
+            choices: [
+                { text: "Baixo o app e deixo ele escanear meu rosto sem ver a procedência.", points: 0, feedback: "🚨 Perigo Biométrico! Seu rosto é a sua 'senha' mais forte. Você acabou de dar para um desconhecido." },
+                { text: "Baixo, uso o filtro e deleto o aplicativo do celular logo em seguida.", points: 50, feedback: "⚠️ O aplicativo já enviou a sua foto para o servidor deles. Deletar do celular não apaga de lá." },
+                { text: "Pesquiso primeiro para ver se a empresa é segura e se ela tem uma política de apagar a foto após o filtro.", points: 100, feedback: "🏆 Mestre da Privacidade Final! Você protegeu seu rosto, seu dado mais pessoal de todos!" }
             ]
         }
     ];
+
+    // Função universal para embaralhar Arrays (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function initGame() {
+        // Separa as questões por categoria
+        const cat1 = basePhases.filter(p => p.category === 1);
+        const cat2 = basePhases.filter(p => p.category === 2);
+        const cat3 = basePhases.filter(p => p.category === 3);
+
+        // Embaralha as perguntas DENTRO de cada categoria
+        shuffleArray(cat1);
+        shuffleArray(cat2);
+        shuffleArray(cat3);
+
+        // Junta tudo de volta na ordem correta das etapas
+        gamePhases = [...cat1, ...cat2, ...cat3];
+
+        // Embaralha as alternativas (botões) de cada pergunta
+        gamePhases.forEach(phase => {
+            shuffleArray(phase.choices);
+        });
+    }
 
     function startGame() {
         const inputName = document.getElementById("playerName").value.trim();
@@ -200,20 +383,31 @@
             return;
         }
         playerName = inputName;
+        
+        // Prepara as perguntas antes de iniciar
+        initGame();
+
         document.getElementById("intro").classList.add("hidden");
+        document.getElementById("progress-bar-container").style.display = "block";
         document.getElementById("score-board").style.display = "block";
         document.getElementById("game-area").style.display = "block";
         loadPhase(0);
     }
 
     function loadPhase(phaseIndex) {
-        if (phaseIndex >= phases.length) {
+        if (phaseIndex >= gamePhases.length) {
             endGame();
             return;
         }
 
-        const phase = phases[phaseIndex];
-        document.getElementById("phase-title").innerText = phase.title;
+        // Atualiza barra de progresso
+        const progressPercentage = (phaseIndex / gamePhases.length) * 100;
+        document.getElementById("progress-bar").style.width = progressPercentage + "%";
+
+        const phase = gamePhases[phaseIndex];
+        
+        // Título dinâmico: "Pergunta X/18: Título da Pergunta"
+        document.getElementById("phase-title").innerText = `Pergunta ${phaseIndex + 1}/18: ${phase.title}`;
         document.getElementById("scenario-text").innerText = phase.text;
         document.getElementById("robot-face").innerText = phase.emoji;
         
@@ -233,33 +427,38 @@
         score += choice.points;
         document.getElementById("current-score").innerText = score;
         alert(choice.feedback);
-        loadPhase(choice.next);
+        currentPhase++;
+        loadPhase(currentPhase);
     }
 
     function endGame() {
         document.getElementById("game-area").style.display = "none";
         document.getElementById("score-board").style.display = "none";
+        document.getElementById("progress-bar-container").style.display = "none";
         document.getElementById("result-area").style.display = "block";
         
         document.getElementById("display-name").innerText = playerName;
         document.getElementById("final-score").innerText = score;
 
-        let badgeEmoji = "💥";
-        let badgeTitle = "Bug Ambulante";
-        let badgeDesc = "Parece que seus circuitos pifaram! Você precisa revisar como a IA funciona.";
+        // Calcula a Badge correta usando Matemática (A cada 50 pontos = +1 no índice)
+        let badgeIndex = Math.floor(score / 50);
+        // Garantia para não bugar o índice
+        if(badgeIndex > 36) badgeIndex = 36;
+        if(badgeIndex < 0) badgeIndex = 0;
+        
+        let badgeTitle = badgesNomes[badgeIndex];
+        let badgeEmoji = "🏅";
+        let badgeDesc = "";
 
-        if (score === 300) {
-            badgeEmoji = "🥇"; 
-            badgeTitle = "Superinteligência Ética"; 
-            badgeDesc = "Impecável! Seus algoritmos de ética e privacidade estão no nível máximo!";
-        } else if (score >= 200) {
-            badgeEmoji = "🥈"; 
-            badgeTitle = "Rede Neural em Treinamento"; 
-            badgeDesc = "Muito bom! Você está processando bem, mas sua IA escorregou em um detalhe.";
-        } else if (score >= 50) {
-            badgeEmoji = "🥉"; 
-            badgeTitle = "Papagaio de Bytes"; 
-            badgeDesc = "Sua IA está apenas repetindo o que vê. Tenha mais cuidado com os riscos da tecnologia.";
+        // Textos descritivos baseados em grandes faixas de pontuação
+        if (score === 1800) {
+            badgeEmoji = "🥇"; badgeDesc = "Você dominou completamente os conceitos de ética, viés, direitos autorais e privacidade em IA!";
+        } else if (score >= 1200) {
+            badgeEmoji = "🥈"; badgeDesc = "Incrível! Você é um cidadão digital muito responsável, cometeu apenas pequenos deslizes.";
+        } else if (score >= 600) {
+            badgeEmoji = "🥉"; badgeDesc = "Você está aprendendo! Precisa prestar mais atenção aos riscos, privacidade e direitos dos outros.";
+        } else {
+            badgeEmoji = "💥"; badgeDesc = "Atenção! Sua IA causou problemas na internet. Volte, estude sobre uso ético e jogue novamente!";
         }
 
         document.getElementById("badge-emoji").innerText = badgeEmoji;
